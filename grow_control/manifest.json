@@ -1,0 +1,12 @@
+{
+  "domain": "grow_control",
+  "name": "Grow Control",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": [],
+  "config_flow": true,
+  "version": "1.0",
+  "documentation": "https://github.com/homeAssistantGrowControl/HAGC",
+  "quality_scale": "gold",
+  "persistent_directory": "grow_control"
+}
