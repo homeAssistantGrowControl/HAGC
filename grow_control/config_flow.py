@@ -1,5 +1,5 @@
 import voluptuous as vol
-from datetime import timedelta
+from datetime import timedelta  # Importiere timedelta aus datetime
 from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.helpers import config_entry_flow
@@ -40,21 +40,23 @@ class GrowControlConfigFlow(config_entries.ConfigFlow, domain="grow_control"):
     async def create_calendar_events(self, user_input):
         # Create events in the selected calendar entity
         calendar_entity_id = user_input["calendar_entity_id"]
-        start_date: datetime | None = dt_util.parse_datetime(user_input["start_date"])
+        start_date = dt_util.parse_datetime(user_input["start_date"])
         end_date = dt_util.parse_datetime(user_input["end_date"])
 
         # Create events from start_date to end_date
-        while start_date <= end_date:
+        while start_date.date() <= end_date.date():
+            formatted_start_date = start_date.strftime("%Y-%m-%d")  # Formatieren als "JJJJ-MM-TT"
+            formatted_end_date = (start_date + timedelta(days=1)).strftime("%Y-%m-%d")  # Formatieren als "JJJJ-MM-TT"
             await self.hass.services.async_call(
                 "calendar",
                 "event",
                 {
                     "calendar_id": calendar_entity_id,
                     "title": "Your Event Title",
-                    "start": start_date.isoformat(),
-                    "end": (start_date + timedelta(days=1)).isoformat(),
+                    "start": "2023-12-31",
+                    "end": " 2024-01-02",
+                    "all_day": True
                 },
-                blocking=True
             )
             start_date += timedelta(days=1)
 
