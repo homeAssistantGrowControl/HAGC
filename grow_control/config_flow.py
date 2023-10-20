@@ -44,19 +44,17 @@ class GrowControlConfigFlow(config_entries.ConfigFlow, domain="grow_control"):
         end_date = dt_util.parse_datetime(user_input["end_date"])
 
         # Create events from start_date to end_date
-        while start_date.date() <= end_date.date():
-            formatted_start_date = start_date.strftime("%Y-%m-%d")  # Formatieren als "JJJJ-MM-TT"
-            formatted_end_date = (start_date + timedelta(days=1)).strftime("%Y-%m-%d")  # Formatieren als "JJJJ-MM-TT"
+        while start_date <= end_date:
             await self.hass.services.async_call(
                 "calendar",
                 "event",
                 {
                     "calendar_id": calendar_entity_id,
                     "title": "Your Event Title",
-                    "start": "2023-12-31",
-                    "end": " 2024-01-02",
-                    "all_day": True
+                    "start": start_date.isoformat(),
+                    "end": (start_date + timedelta(days=1)).isoformat(),
                 },
+                blocking=True
             )
             start_date += timedelta(days=1)
 
